@@ -90,7 +90,7 @@ class WikimediaCommonsDataset(Dataset):
                 yield img
 
     def __getitem__(self, idx):
-        url = idx2url(self.path, idx)
+        url = idx2url(self.path, idx, self.total, self.size)
         return self.fetch(url)
 
     def fetch(self, url):
