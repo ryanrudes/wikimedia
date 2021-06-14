@@ -41,6 +41,9 @@ def idx2url(path, idx, total, size):
 
 def getline(path, linenum, total, size):
     with open(path, 'rb') as f:
+        if linenum == 0:
+            return f.readline()[:-1].decode()
+            
         f.seek(int(linenum / total * size), os.SEEK_SET)
         while f.read(1) != b'\n':
             f.seek(-2, os.SEEK_CUR)
