@@ -52,7 +52,7 @@ Then, run the script:
 python loaders/pytorch.py
 ```
 You can use this dataset by simply importing the `DataLoader` class, for example:
-```
+```python
 from loaders.pytorch import WikimediaCommonsDataset
 
 dataset = WikimediaCommonsDataset()
@@ -61,7 +61,7 @@ for image in dataset:
     print (image.shape)
 ```
 You can modify the following arguments of `WikimediaCommonsDataset`. Their default values are given below:
-```
+```python
 path        = 'filtered.txt'
 verbose     = True
 max_retries = None
