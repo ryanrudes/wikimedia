@@ -1,7 +1,7 @@
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 from urllib.request import urlopen
-from utils import cycle
+from .utils import cycle
 from skimage import io
 from PIL import Image
 
@@ -159,8 +159,3 @@ class WikimediaCommonsLoader(DataLoader):
 
             if idx == 0:
                 yield batch
-
-if __name__ == '__main__':
-    loader = WikimediaCommonsLoader()
-    for i, batch in enumerate(loader):
-        print (i + 1, batch.shape)
