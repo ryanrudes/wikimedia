@@ -1,6 +1,6 @@
 from torch.utils.data import Dataset
 from urllib.request import urlopen
-from utils import cycle
+from .utils import cycle
 from skimage import io
 from PIL import Image
 
