@@ -19,6 +19,7 @@ These are the requirements for the PyTorch `DataLoader`:
 - [`scikit-image`](https://github.com/scikit-image/scikit-image)
 - [`pillow`](https://github.com/python-pillow/Pillow)
 - [`opencv-python`](https://github.com/opencv/opencv)
+- [`torchvision`](https://github.com/pytorch/vision)
 
 ### Data
 
@@ -41,8 +42,8 @@ There are 41666578 URLs in total, equating to 4.73 GB.
 ### Usage
 
 Included is a:
-- [x] PyTorch `DataLoader` for this dataset
-- [ ] TensorFlow `Dataset` for this dataset
+- [x] PyTorch `Dataset` and `DataLoader`
+- [ ] TensorFlow `Dataset`
 
 #### PyTorch `DataLoader` Usage
 To demo the PyTorch `DataLoader`, first `cd` to the main directory. Then, download the dataset:
@@ -55,14 +56,21 @@ python loaders/pytorch.py
 ```
 You can use this dataset by simply importing the `DataLoader` class, for example:
 ```python
-from loaders.pytorch import WikimediaCommonsDataset
+from loaders.pytorch import WikimediaCommonsLoader
 
-dataset = WikimediaCommonsDataset()
+loader = WikimediaCommonsLoader()
 
-for image in dataset:
-    print (image.shape)
+for batch in loader:
+    print (batch.shape)
+
+>>> torch.Size([32, 3, 256, 256])
+>>> torch.Size([32, 3, 256, 256])
+>>> torch.Size([32, 3, 256, 256])
+>>> torch.Size([32, 3, 256, 256])
+>>> torch.Size([32, 3, 256, 256])
+...
 ```
-You can modify the following arguments of `WikimediaCommonsDataset`. Their default values are given below:
+You can modify the following arguments of `WikimediaCommonsLoader`. Their default values are given below:
 ```python
 path        = 'filtered.txt'
 verbose     = True
@@ -72,7 +80,28 @@ shuffle     = True
 max_buffer  = 4096
 workers     = 8
 transform   = None
+batch_size  = 32
+resize_to   = 512
+crop_to     = 256
 ```
+Or, you can use the backbone `WikimediaCommonsDataset` class, which returns the raw images, one by one, without applying any transformations, whereas `WikimediaCommonsLoader` performs resizing and random cropping:
+```python
+from loaders.pytorch import WikimediaCommonsDataset
+
+dataset = WikimediaCommonsDataset()
+
+for image in dataset:
+    print (image.shape)
+
+>>> (120, 100, 3)
+>>> (80, 120, 3)
+>>> (120, 80, 3)
+>>> (98, 120, 3)
+>>> (120, 97, 3)
+>>> (120, 120, 3)
+...
+```
+The `WikimediaCommonsDataset` class takes almost the same arguments as `WikimediaCommonsLoader`, excluding `batch_size`, `resize_to`, and `crop_to`.
 
 ### Links and Further Info
 

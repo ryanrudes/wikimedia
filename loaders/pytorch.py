@@ -1,6 +1,7 @@
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
+from torchvision import transforms
 from urllib.request import urlopen
-from .utils import cycle
+from utils import cycle
 from skimage import io
 from PIL import Image
 
@@ -9,6 +10,7 @@ import warnings
 import random
 import urllib
 import string
+import torch
 import math
 import cv2
 import os
@@ -43,7 +45,7 @@ def getline(path, linenum, total, size):
     with open(path, 'rb') as f:
         if linenum == 0:
             return f.readline()[:-1].decode()
-            
+
         f.seek(int(linenum / total * size), os.SEEK_SET)
         while f.read(1) != b'\n':
             f.seek(-2, os.SEEK_CUR)
@@ -130,7 +132,35 @@ class WikimediaCommonsDataset(Dataset):
         if self.verbose:
             warnings.warn('Exception when attepting to fetch %s: %s' % (url, str(exc)), UserWarning)
 
+class WikimediaCommonsLoader(DataLoader):
+    def __init__(self, batch_size=32, resize_to=512, crop_to=256, **kwargs):
+        super().__init__(WikimediaCommonsDataset(**kwargs))
+        self.bs = batch_size
+        self.resize_to = resize_to
+        self.crop_to = crop_to
+        self.transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Resize(resize_to),
+            transforms.RandomCrop(crop_to)
+        ])
+
+    def __len__(self):
+        return len(self.dataset) // self.bs
+
+    def __iter__(self):
+        batch = torch.empty((self.bs, 3, 256, 256), dtype = torch.float32)
+        idx = 0
+
+        for img in self.dataset:
+            batch[idx] = self.transform(img)
+
+            idx += 1
+            idx %= self.bs
+
+            if idx == 0:
+                yield batch
+
 if __name__ == '__main__':
-    dataset = WikimediaCommonsDataset()
-    for i, img in enumerate(dataset):
-        print (i + 1, img.shape)
+    loader = WikimediaCommonsLoader()
+    for i, batch in enumerate(loader):
+        print (i + 1, batch.shape)
