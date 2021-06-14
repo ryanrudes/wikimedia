@@ -1,5 +1,7 @@
 <img src="https://user-images.githubusercontent.com/18452581/121902225-1f5a5680-ccf5-11eb-8343-2a42720616d7.png" width="100%">
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/gist/Ryan-Rudes/ad5bc9481ffb268e1cacaf3808d395e5/wikimedia-dataset-demo.ipynb)
+
 ### Introduction
 
 Wikimedia Commons Image Dataset is comprised of over 40 million URLs to Wikimedia Commons images.
