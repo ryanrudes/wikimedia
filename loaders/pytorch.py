@@ -57,7 +57,8 @@ class WikimediaCommonsDataset(Dataset):
                  timeout=None,
                  shuffle=True,
                  max_buffer=4096,
-                 workers=8):
+                 workers=8,
+                 transform=None):
         self.path = path
         self.verbose = verbose
         self.max_retries = 10000000000 if max_retries is None else max_retries
@@ -66,6 +67,7 @@ class WikimediaCommonsDataset(Dataset):
         self._rangefn = cycle if shuffle else range
         self.max_buffer = max_buffer
         self.workers = workers
+        self.transform = transform
 
     def __len__(self):
         return self.total
@@ -96,7 +98,8 @@ class WikimediaCommonsDataset(Dataset):
             try:
                 img = io.imread(url)
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
+                if not self.transform is None:
+                    img = transform(img)
                 return img
             except urllib.error.HTTPError as e:
                 if e.code == 429:

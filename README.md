@@ -71,6 +71,7 @@ timeout     = None
 shuffle     = True
 max_buffer  = 4096
 workers     = 8
+transform   = None
 ```
 
 ### Links and Further Info
