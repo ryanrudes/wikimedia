@@ -99,7 +99,7 @@ class WikimediaCommonsDataset(Dataset):
                 img = io.imread(url)
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 if not self.transform is None:
-                    img = transform(img)
+                    img = self.transform(img)
                 return img
             except urllib.error.HTTPError as e:
                 if e.code == 429:
