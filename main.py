@@ -71,7 +71,7 @@ def worker():
         # Look for image links
         try:
             for elem in soup.find_all('li', class_ = 'gallerybox'):
-                elem = next(next(next(nextn(next(elem.children).children, 1).children).children).children)
+                elem = next(next(next(nextn(elem.children, 1).children).children).children)
                 if elem.name == 'img':
                     src = elem['src']
                     if not src is None:
@@ -96,6 +96,7 @@ chunk = 64
 total = 0
 
 outdir = input('Enter output directory path: ')
+os.makedirs(outdir, exist_ok = True)
 
 outfp = os.path.join(outdir, 'output.txt')
 ooffp = os.path.join(outdir, 'failed.txt')
